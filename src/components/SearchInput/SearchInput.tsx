@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import styles from './SearchForm.module.scss';
+import styles from './SearchInput.module.scss';
 
 type Props = {
   placeholder: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  getInputValue: (query: string) => void;
+  getInputValue: () => void;
 };
 
-class SearchForm extends Component<Props> {
+class SearchInput extends Component<Props> {
   handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.props.getInputValue('kkkk');
+      this.props.getInputValue();
     }
   };
 
@@ -29,4 +29,4 @@ class SearchForm extends Component<Props> {
   }
 }
 
-export default SearchForm;
+export default SearchInput;
