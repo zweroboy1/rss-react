@@ -10,11 +10,20 @@
     "lint:fix": "eslint --fix . --ext ts,tsx",
     "precommit": "npm run lint",
     "format:fix": "prettier . --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "postinstall": "chmod +x .husky/*"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.69.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
