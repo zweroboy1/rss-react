@@ -5,3 +5,5 @@ export const NO_IMAGE_PLACEHOLDER =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png';
 export const SEARCH_MOVIES_ENDPOINT =
   'https://api.themoviedb.org/3/search/movie';
+export const UPCOMING_MOVIES_ENDPOINT =
+  'https://api.themoviedb.org/3/movie/upcoming';

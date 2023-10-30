@@ -1,5 +1,9 @@
 import { DataFetcher } from './DataFetcher';
-import { API_KEY, SEARCH_MOVIES_ENDPOINT } from '../constants';
+import {
+  API_KEY,
+  SEARCH_MOVIES_ENDPOINT,
+  UPCOMING_MOVIES_ENDPOINT,
+} from '../constants';
 import { Movie, ServerResponse } from '../types';
 import { buildUrl } from '../utils/buildUrl';
 import { mapper } from '../utils/mapper';
@@ -30,7 +34,9 @@ export class Tmdb {
 
   public async getSearchMovies(query: string): Promise<Movie[]> {
     try {
-      const movies = await this.getMovies(SEARCH_MOVIES_ENDPOINT, { query });
+      const movies = query
+        ? await this.getMovies(SEARCH_MOVIES_ENDPOINT, { query })
+        : this.getMovies(UPCOMING_MOVIES_ENDPOINT, {});
       return movies;
     } catch (error) {
       throw error;

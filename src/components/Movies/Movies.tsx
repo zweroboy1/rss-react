@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Tmdb } from '../../services/Tmdb';
 import { Movie } from '../../types';
+import styles from './Movies.module.scss';
 
 interface MoviesProps {
   query: string;
@@ -60,6 +61,7 @@ class Movies extends Component<MoviesProps, MoviesState> {
 
   render() {
     const { movies, loading, error } = this.state;
+    const { query } = this.props;
 
     if (loading) {
       return <div>Loading...</div>;
@@ -71,13 +73,23 @@ class Movies extends Component<MoviesProps, MoviesState> {
 
     if (movies.length > 0) {
       return (
-        <div>
-          <h1>
-            {this.props.query !== '' ? this.props.query : 'Popular movies'}
+        <div className={styles['movies__container']}>
+          <h1 className={styles['movies__title']}>
+            {query !== '' ? 'Search query: ' + query : 'Upcoming movies'}
           </h1>
-          <ul>
+          <ul className={styles['movies__list']}>
             {movies.map((movie) => (
-              <li key={movie.id}>{movie.title}</li>
+              <li key={movie.id} className={styles['movie__card']}>
+                <img
+                  src={movie.image}
+                  alt={movie.title}
+                  className={styles['movie__image']}
+                />
+                <h2 className={styles['movie__title']}>{movie.title}</h2>
+                <p className={styles['movie__description']}>
+                  {movie.description}
+                </p>
+              </li>
             ))}
           </ul>
         </div>

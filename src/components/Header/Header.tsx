@@ -26,7 +26,6 @@ class Header extends Component<HeaderProps> {
   };
 
   handleSearch = () => {
-    console.log(this.state.searchQuery);
     this.props.onSearch(this.state.searchQuery);
     this.setState({ searchQuery: '' });
   };

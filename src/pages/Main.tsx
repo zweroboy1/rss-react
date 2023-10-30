@@ -18,7 +18,6 @@ class Main extends Component {
   }
 
   updateSearchQuery = (query: string) => {
-    console.log('lol', query);
     this.setState({ searchQuery: query });
   };
 
