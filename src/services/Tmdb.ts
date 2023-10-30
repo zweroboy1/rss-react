@@ -27,7 +27,6 @@ export class Tmdb {
       const movies: Movie[] = data.results.map((el) => mapper(el));
       return movies;
     } catch (error) {
-      console.error('Error fetching data:', error);
       throw error;
     }
   }

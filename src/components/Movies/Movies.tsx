@@ -4,6 +4,7 @@ import { Movie } from '../../types';
 import styles from './Movies.module.scss';
 import { MovieCard } from '../MovieCard';
 import { Loader } from '../Loader';
+import { Message } from '../Message';
 
 interface MoviesProps {
   query: string;
@@ -57,7 +58,6 @@ class Movies extends Component<MoviesProps, MoviesState> {
         error: 'An error occurred while fetching data',
         loading: false,
       });
-      console.error(error);
     }
   }
 
@@ -70,7 +70,7 @@ class Movies extends Component<MoviesProps, MoviesState> {
     }
 
     if (error) {
-      return <div>Error: {error}</div>;
+      return <Message message={`Error: ${error}`}></Message>;
     }
 
     if (movies.length > 0) {
@@ -87,7 +87,7 @@ class Movies extends Component<MoviesProps, MoviesState> {
         </div>
       );
     } else {
-      return <div>No movies found.</div>;
+      return <Message message={`No movies found for "${query}"`}></Message>;
     }
   }
 }
