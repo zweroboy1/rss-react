@@ -5,8 +5,17 @@
   border: 2px solid black;
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
 
   &:hover {
     background-color: yellowgreen;
+  }
+}
+
+@media (max-width: 500px) {
+  .button {
+    margin: 0.4em;
+    padding: 0.2em;
+    font-size: 1.5em;
   }
 }
