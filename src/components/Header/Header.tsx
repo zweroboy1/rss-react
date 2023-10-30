@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
+import { LOCALSTORAGE_NAME } from '../../constants';
 
 import styles from './Header.module.scss';
 
@@ -10,12 +11,21 @@ class Header extends Component {
   }
 
   state = {
-    searchQuery: '',
+    searchQuery: this.getQuery(),
     isError: false,
   };
 
+  getQuery() {
+    return localStorage.getItem(LOCALSTORAGE_NAME) ?? '';
+  }
+
+  setQuery(query: string) {
+    localStorage.setItem(LOCALSTORAGE_NAME, query);
+  }
+
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ searchQuery: event.target.value });
+    this.setQuery(event.target.value);
   };
 
   handleSearch = () => {
@@ -29,7 +39,7 @@ class Header extends Component {
 
   componentDidUpdate() {
     if (this.state.isError)
-      throw new Error('You clicked the button and broke the app!');
+      throw new Error('You clicked the button and emit the error!');
   }
 
   render() {
