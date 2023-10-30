@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Tmdb } from '../../services/Tmdb';
 import { Movie } from '../../types';
 import styles from './Movies.module.scss';
+import { MovieCard } from '../MovieCard';
 
 interface MoviesProps {
   query: string;
@@ -79,17 +80,7 @@ class Movies extends Component<MoviesProps, MoviesState> {
           </h1>
           <ul className={styles['movies__list']}>
             {movies.map((movie) => (
-              <li key={movie.id} className={styles['movie__card']}>
-                <img
-                  src={movie.image}
-                  alt={movie.title}
-                  className={styles['movie__image']}
-                />
-                <h2 className={styles['movie__title']}>{movie.title}</h2>
-                <p className={styles['movie__description']}>
-                  {movie.description}
-                </p>
-              </li>
+              <MovieCard key={movie.id} movie={movie} />
             ))}
           </ul>
         </div>
