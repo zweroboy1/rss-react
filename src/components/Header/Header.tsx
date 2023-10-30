@@ -5,6 +5,10 @@ import { Button } from '../Button';
 import styles from './Header.module.scss';
 
 class Header extends Component {
+  constructor(props: object) {
+    super(props);
+  }
+
   state = {
     searchQuery: '',
     isError: false,
@@ -23,10 +27,12 @@ class Header extends Component {
     this.setState({ isError: true });
   };
 
+  componentDidUpdate() {
+    if (this.state.isError)
+      throw new Error('You clicked the button and broke the app!');
+  }
+
   render() {
-    if (this.state.isError) {
-      throw new Error('There is a bad Error!!!');
-    }
     return (
       <>
         <h1 className={styles.h1}>Movies</h1>
@@ -38,6 +44,7 @@ class Header extends Component {
             getInputValue={this.handleSearch}
           />
           <Button onClick={this.handleSearch}>Search</Button>
+          <Button onClick={this.emitError}>Simulate Error</Button>
         </div>
       </>
     );
