@@ -1,35 +1,33 @@
 import React, { Component } from 'react';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
-import { LOCALSTORAGE_NAME } from '../../constants';
 
 import styles from './Header.module.scss';
 
-class Header extends Component {
-  constructor(props: object) {
+interface HeaderProps {
+  query: string;
+  onSearch: (query: string) => void;
+  onUpdateQuery: (query: string) => void;
+}
+
+class Header extends Component<HeaderProps> {
+  constructor(props: HeaderProps) {
     super(props);
   }
 
   state = {
-    searchQuery: this.getQuery(),
+    searchQuery: this.props.query,
     isError: false,
   };
 
-  getQuery() {
-    return localStorage.getItem(LOCALSTORAGE_NAME) ?? '';
-  }
-
-  setQuery(query: string) {
-    localStorage.setItem(LOCALSTORAGE_NAME, query);
-  }
-
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ searchQuery: event.target.value });
-    this.setQuery(event.target.value);
+    this.props.onUpdateQuery(event.target.value);
   };
 
   handleSearch = () => {
     console.log(this.state.searchQuery);
+    this.props.onSearch(this.state.searchQuery);
     this.setState({ searchQuery: '' });
   };
 
