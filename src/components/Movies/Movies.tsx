@@ -3,6 +3,7 @@ import { Tmdb } from '../../services/Tmdb';
 import { Movie } from '../../types';
 import styles from './Movies.module.scss';
 import { MovieCard } from '../MovieCard';
+import { Loader } from '../Loader';
 
 interface MoviesProps {
   query: string;
@@ -65,7 +66,7 @@ class Movies extends Component<MoviesProps, MoviesState> {
     const { query } = this.props;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <Loader />;
     }
 
     if (error) {
