@@ -16,17 +16,3 @@ class App extends Component {
 }
 
 export default App;
-/*
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Main from './pages/Main';
-import { ErrorBoundary } from './components/ErrorBoundary';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ErrorBoundary fallback={<p>Something went wrong</p>}>
-      <Main />
-    </ErrorBoundary>
-  </React.StrictMode>
-);
-*/
