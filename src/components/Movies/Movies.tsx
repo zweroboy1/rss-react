@@ -1,95 +1,63 @@
-import { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tmdb } from '../../services/Tmdb';
 import { Movie } from '../../types';
-import styles from './Movies.module.scss';
 import { MovieCard } from '../MovieCard';
 import { Loader } from '../Loader';
 import { Message } from '../Message';
+
+import styles from './Movies.module.scss';
 
 interface MoviesProps {
   query: string;
 }
 
-interface MoviesState {
-  movies: Movie[];
-  loading: boolean;
-  error: string | null;
-}
+const Movies: React.FC<MoviesProps> = ({ query }) => {
+  const tmdb = new Tmdb();
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-class Movies extends Component<MoviesProps, MoviesState> {
-  private tmdb: Tmdb;
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true);
 
-  constructor(props: MoviesProps) {
-    super(props);
+      try {
+        const movies = await tmdb.getSearchMovies(query);
 
-    this.state = {
-      movies: [],
-      loading: false,
-      error: null,
+        setMovies(movies);
+        setLoading(false);
+        setError(null);
+      } catch (error) {
+        setError('An error occurred while fetching data');
+        setLoading(false);
+      }
     };
 
-    this.tmdb = new Tmdb();
+    fetchMovies();
+  }, [query]);
+
+  if (loading) {
+    return <Loader />;
   }
 
-  componentDidMount() {
-    this.fetchMovies();
+  if (error) {
+    return <Message message={`Error: ${error}`} />;
   }
 
-  componentDidUpdate(prevProps: MoviesProps) {
-    if (this.props.query !== prevProps.query) {
-      this.fetchMovies();
-    }
-  }
-
-  async fetchMovies() {
-    this.setState({ loading: true });
-
-    try {
-      const { query } = this.props;
-      const movies = await this.tmdb.getSearchMovies(query);
-
-      this.setState({
-        movies,
-        loading: false,
-        error: null,
-      });
-    } catch (error) {
-      this.setState({
-        error: 'An error occurred while fetching data',
-        loading: false,
-      });
-    }
-  }
-
-  render() {
-    const { movies, loading, error } = this.state;
-    const { query } = this.props;
-
-    if (loading) {
-      return <Loader />;
-    }
-
-    if (error) {
-      return <Message message={`Error: ${error}`}></Message>;
-    }
-
-    if (movies.length > 0) {
-      return (
-        <div className={styles['movies__container']}>
-          <h1 className={styles['movies__title']}>
-            {query !== '' ? 'Search query: ' + query : 'Upcoming movies'}
-          </h1>
-          <ul className={styles['movies__list']}>
-            {movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </ul>
-        </div>
-      );
-    } else {
-      return <Message message={`No movies found for "${query}"`}></Message>;
-    }
-  }
-}
+  return (
+    <div className={styles['movies__container']}>
+      <h1 className={styles['movies__title']}>
+        {query !== '' ? 'Search query: ' + query : 'Upcoming movies'}
+      </h1>
+      <ul className={styles['movies__list']}>
+        {movies.length > 0 ? (
+          movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+        ) : (
+          <Message message={`No movies found for "${query}"`} />
+        )}
+      </ul>
+    </div>
+  );
+};
 
 export default Movies;

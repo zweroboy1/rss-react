@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './SearchInput.module.scss';
 
 type Props = {
@@ -8,25 +8,28 @@ type Props = {
   getInputValue: () => void;
 };
 
-class SearchInput extends Component<Props> {
-  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+const SearchInput: React.FC<Props> = ({
+  placeholder,
+  value,
+  onChange,
+  getInputValue,
+}) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.props.getInputValue();
+      getInputValue();
     }
   };
 
-  render() {
-    return (
-      <input
-        className={styles.search}
-        type="text"
-        placeholder={this.props.placeholder}
-        value={this.props.value}
-        onChange={this.props.onChange}
-        onKeyDown={this.handleKeyDown}
-      />
-    );
-  }
-}
+  return (
+    <input
+      className={styles.search}
+      type="text"
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      onKeyDown={handleKeyDown}
+    />
+  );
+};
 
 export default SearchInput;

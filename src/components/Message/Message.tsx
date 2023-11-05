@@ -1,14 +1,12 @@
-import { Component } from 'react';
+import React from 'react';
 import styles from './Message.module.scss';
 
 interface MessageProps {
   message: string;
 }
 
-class Message extends Component<MessageProps> {
-  render() {
-    return <div className={styles['message']}>{this.props.message}</div>;
-  }
-}
+const Message: React.FC<MessageProps> = ({ message }) => {
+  return <div className={styles['message']}>{message}</div>;
+};
 
 export default Message;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
 
@@ -10,52 +10,45 @@ interface HeaderProps {
   onUpdateQuery: (query: string) => void;
 }
 
-class Header extends Component<HeaderProps> {
-  constructor(props: HeaderProps) {
-    super(props);
-  }
+const Header: React.FC<HeaderProps> = (props) => {
+  const [searchQuery, setSearchQuery] = useState<string>(props.query);
+  const [isError, setIsError] = useState(false);
 
-  state = {
-    searchQuery: this.props.query,
-    isError: false,
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    props.onUpdateQuery(event.target.value);
   };
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchQuery: event.target.value });
-    this.props.onUpdateQuery(event.target.value);
+  const handleSearch = () => {
+    props.onSearch(searchQuery);
+    setSearchQuery('');
   };
 
-  handleSearch = () => {
-    this.props.onSearch(this.state.searchQuery);
-    this.setState({ searchQuery: '' });
+  const emitError = () => {
+    setIsError(true);
   };
 
-  emitError = () => {
-    this.setState({ isError: true });
-  };
+  useEffect(() => {
+    if (isError) {
+      throw new Error('You clicked the button and emitted the error!');
+    }
+  }, [isError]);
 
-  componentDidUpdate() {
-    if (this.state.isError)
-      throw new Error('You clicked the button and emit the error!');
-  }
-
-  render() {
-    return (
-      <>
-        <h1 className={styles.h1}>Movies</h1>
-        <div className={styles.container}>
-          <SearchInput
-            placeholder="input movie title"
-            value={this.state.searchQuery}
-            onChange={this.handleInputChange}
-            getInputValue={this.handleSearch}
-          />
-          <Button onClick={this.handleSearch}>Search</Button>
-          <Button onClick={this.emitError}>Simulate Error</Button>
-        </div>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <h1 className={styles.h1}>Movies</h1>
+      <div className={styles.container}>
+        <SearchInput
+          placeholder="input movie title"
+          value={searchQuery}
+          onChange={handleInputChange}
+          getInputValue={handleSearch}
+        />
+        <Button onClick={handleSearch}>Search</Button>
+        <Button onClick={emitError}>Simulate Error</Button>
+      </div>
+    </>
+  );
+};
 
 export default Header;

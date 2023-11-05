@@ -1,38 +1,38 @@
-import { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Movies } from '../components/Movies';
 import styles from './Main.module.scss';
 import { LOCALSTORAGE_NAME } from '../constants';
 
-class Main extends Component {
-  state = {
-    searchQuery: this.getQuery(),
-  };
+const Main: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>(getQuery());
 
-  getQuery() {
+  function getQuery() {
     return localStorage.getItem(LOCALSTORAGE_NAME) ?? '';
   }
 
-  setQuery(query: string) {
+  function setQuery(query: string) {
     localStorage.setItem(LOCALSTORAGE_NAME, query);
   }
 
-  updateSearchQuery = (query: string) => {
-    this.setState({ searchQuery: query });
+  const updateSearchQuery = (query: string) => {
+    setSearchQuery(query);
   };
 
-  render() {
-    return (
-      <main className={styles.main}>
-        <Header
-          query={this.state.searchQuery}
-          onSearch={this.updateSearchQuery}
-          onUpdateQuery={this.setQuery}
-        />
-        <Movies query={this.state.searchQuery} />
-      </main>
-    );
-  }
-}
+  useEffect(() => {
+    setQuery(searchQuery);
+  }, [searchQuery]);
+
+  return (
+    <main className={styles.main}>
+      <Header
+        query={searchQuery}
+        onSearch={updateSearchQuery}
+        onUpdateQuery={setQuery}
+      />
+      <Movies query={searchQuery} />
+    </main>
+  );
+};
 
 export default Main;
