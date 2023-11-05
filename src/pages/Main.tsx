@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
-import { Movies } from '../components/Movies';
+import { Beers } from '../components/Beers';
 import styles from './Main.module.scss';
 import { LOCALSTORAGE_NAME } from '../constants';
 
@@ -30,7 +30,7 @@ const Main: React.FC = () => {
         onSearch={updateSearchQuery}
         onUpdateQuery={setQuery}
       />
-      <Movies query={searchQuery} />
+      <Beers query={searchQuery} />
     </main>
   );
 };

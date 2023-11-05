@@ -1,25 +1,18 @@
-export interface Movie {
+export interface Beer {
   id: number;
   title: string;
-  image?: string;
-  poster?: string;
-  description: string;
+  tag: string;
   date: string;
-}
-
-export interface MovieTmdb {
-  id: number;
-  title: string;
+  description: string;
   image: string;
-  overview: string;
-  release_date: string;
-  backdrop_path: string;
-  poster_path: string;
+}
+export interface BeerApi {
+  id: number;
+  name: string;
+  tagline: string;
+  first_brewed: string;
+  description: string;
+  image_url: string;
 }
 
-export type ServerResponse = {
-  page: number;
-  results: MovieTmdb[];
-  total_pages: number;
-  total_results: number;
-};
+export type ServerResponse = BeerApi[];

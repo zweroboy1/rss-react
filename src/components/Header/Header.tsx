@@ -36,10 +36,10 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <>
-      <h1 className={styles.h1}>Movies</h1>
+      <h1 className={styles.h1}>Choose your beer</h1>
       <div className={styles.container}>
         <SearchInput
-          placeholder="input movie title"
+          placeholder="input beer name"
           value={searchQuery}
           onChange={handleInputChange}
           getInputValue={handleSearch}

@@ -1,4 +1,4 @@
-.movies {
+.beers {
   &__container {
     display: flex;
     width: 100%;
@@ -21,11 +21,11 @@
   &__list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     gap: 20px;
     width: 100%;
     margin: 0;
-    padding: 0;
+    padding: 1em;
     list-style: none;
   }
 }
