@@ -8,3 +8,11 @@
 .container {
   background-color: #ddddd2;
 }
+
+.content {
+  display: flex;
+}
+
+.right {
+  flex: 0;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Beers } from '../components/Beers';
 import styles from './Main.module.scss';
@@ -30,7 +31,12 @@ const Main: React.FC = () => {
         onSearch={updateSearchQuery}
         onUpdateQuery={setQuery}
       />
-      <Beers query={searchQuery} />
+      <div className={styles.content}>
+        <Beers query={searchQuery} />
+        <div className={styles.right}>
+          <Outlet />
+        </div>
+      </div>
     </main>
   );
 };

@@ -9,12 +9,20 @@
     width: 200px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+
     cursor: pointer;
 
     &:hover {
       filter: brightness(1.1);
     }
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: initial;
   }
 
   &__image-container {

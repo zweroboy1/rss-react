@@ -25,6 +25,18 @@ export class PunkApi {
     }
   }
 
+  public async getBeer(id: string): Promise<Beer> {
+    try {
+      const data: ServerResponse = await this.dataFetcher.fetchData(
+        `${BEER_ENDPOINT}/${id}`
+      );
+      const beer: Beer = mapper(data[0]);
+      return beer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async getSearchBeers(query: string): Promise<Beer[]> {
     try {
       const beers = query

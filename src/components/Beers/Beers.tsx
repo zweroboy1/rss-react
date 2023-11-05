@@ -23,7 +23,6 @@ const Beers: React.FC<BeersProps> = ({ query }) => {
 
       try {
         const beers = await punkApi.getSearchBeers(query);
-
         setBeers(beers);
         setLoading(false);
         setError(null);
@@ -46,9 +45,10 @@ const Beers: React.FC<BeersProps> = ({ query }) => {
 
   return (
     <div className={styles['beers__container']}>
+      {/*
       <h1 className={styles['beers__title']}>
         {query !== '' ? 'Search query: ' + query : 'Beer list'}
-      </h1>
+      </h1>*/}
       <ul className={styles['beers__list']}>
         {beers.length > 0 ? (
           beers.map((beer) => <BeerCard key={beer.id} beer={beer} />)

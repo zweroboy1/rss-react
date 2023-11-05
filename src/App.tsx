@@ -1,15 +1,16 @@
 import React from 'react';
-import Main from './pages/Main';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from './components/AppRouter';
 import './App.css';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const App: React.FC = () => {
   return (
-    <>
+    <BrowserRouter>
       <ErrorBoundary fallback={<>Something went wrong!</>}>
-        <Main />
+        <AppRouter />
       </ErrorBoundary>
-    </>
+    </BrowserRouter>
   );
 };
 
