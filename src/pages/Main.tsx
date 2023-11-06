@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
+import Pagination from '../components/Pagination/Pagination';
 import { Beers } from '../components/Beers';
 import styles from './Main.module.scss';
 import { LOCALSTORAGE_NAME } from '../constants';
@@ -32,7 +33,8 @@ const Main: React.FC = () => {
         query={searchQuery}
         onSearch={updateSearchQuery}
         onUpdateQuery={setQuery}
-      />
+      />{' '}
+      <Pagination />
       <div className={styles.content}>
         <Beers query={searchQuery} />
         <div className={styles.right}>
