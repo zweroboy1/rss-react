@@ -21,7 +21,6 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   const handleSearch = () => {
     props.onSearch(searchQuery);
-    setSearchQuery('');
   };
 
   const emitError = () => {
