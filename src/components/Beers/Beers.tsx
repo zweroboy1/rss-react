@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PunkApi } from '../../services/PunkApi';
 import { Beer } from '../../types';
 import { BeerCard } from '../BeerCard';
 import { Loader } from '../Loader';
 import { Message } from '../Message';
+import { ITEMS_PER_PAGE } from '../../constants';
 
 import styles from './Beers.module.scss';
 
@@ -12,7 +14,10 @@ interface BeersProps {
 }
 
 const Beers: React.FC<BeersProps> = ({ query }) => {
-  const punkApi = new PunkApi();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const page = Number(queryParams.get('page')) || 1;
+  const limit = Number(queryParams.get('limit')) || ITEMS_PER_PAGE;
   const [beers, setBeers] = useState<Beer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,9 +25,9 @@ const Beers: React.FC<BeersProps> = ({ query }) => {
   useEffect(() => {
     const fetchBeers = async () => {
       setLoading(true);
-
       try {
-        const beers = await punkApi.getSearchBeers(query);
+        const punkApi = new PunkApi();
+        const beers = await punkApi.getSearchBeers(query, page, limit);
         setBeers(beers);
         setLoading(false);
         setError(null);

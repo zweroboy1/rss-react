@@ -37,14 +37,19 @@ export class PunkApi {
     }
   }
 
-  public async getSearchBeers(query: string): Promise<Beer[]> {
+  public async getSearchBeers(
+    query: string,
+    page = 1,
+    limit = ITEMS_PER_PAGE
+  ): Promise<Beer[]> {
     try {
       const beers = query
         ? await this.getBeers(BEER_ENDPOINT, {
             beer_name: query,
-            per_page: ITEMS_PER_PAGE,
+            page: page,
+            per_page: limit,
           })
-        : await this.getBeers(BEER_ENDPOINT, { per_page: ITEMS_PER_PAGE });
+        : await this.getBeers(BEER_ENDPOINT, { page: page, per_page: limit });
       return beers;
     } catch (error) {
       throw error;

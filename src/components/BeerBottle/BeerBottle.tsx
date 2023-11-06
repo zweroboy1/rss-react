@@ -12,11 +12,11 @@ const BeerBottle: React.FC = () => {
   const [beer, setBeer] = useState<Beer | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const punkApi = new PunkApi();
   useEffect(() => {
     const fetchBeer = async () => {
       setLoading(true);
       try {
+        const punkApi = new PunkApi();
         const beer = await punkApi.getBeer(productId);
         setBeer(beer);
         setLoading(false);
