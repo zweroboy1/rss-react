@@ -1,5 +1,5 @@
 import { DataFetcher } from './DataFetcher';
-import { BEER_ENDPOINT } from '../constants';
+import { BEER_ENDPOINT, ITEMS_PER_PAGE } from '../constants';
 import { Beer, ServerResponse } from '../types';
 import { buildUrl } from '../utils/buildUrl';
 import { mapper } from '../utils/mapper';
@@ -13,7 +13,7 @@ export class PunkApi {
 
   public async getBeers(
     endpoint: string,
-    params: Record<string, string> = {}
+    params: Record<string, string | number> = {}
   ): Promise<Beer[]> {
     try {
       const beerSource: string = buildUrl(endpoint, params);
@@ -40,8 +40,11 @@ export class PunkApi {
   public async getSearchBeers(query: string): Promise<Beer[]> {
     try {
       const beers = query
-        ? await this.getBeers(BEER_ENDPOINT, { beer_name: query })
-        : await this.getBeers(BEER_ENDPOINT, {});
+        ? await this.getBeers(BEER_ENDPOINT, {
+            beer_name: query,
+            per_page: ITEMS_PER_PAGE,
+          })
+        : await this.getBeers(BEER_ENDPOINT, { per_page: ITEMS_PER_PAGE });
       return beers;
     } catch (error) {
       throw error;

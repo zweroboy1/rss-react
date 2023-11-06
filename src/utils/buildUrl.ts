@@ -1,6 +1,6 @@
 export function buildUrl(
   baseUrl: string,
-  params: Record<string, string>
+  params: Record<string, string | number>
 ): string {
   const queryString = Object.entries(params)
     .map(

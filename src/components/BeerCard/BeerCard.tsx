@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 import { Beer } from '../../types';
 import styles from './BeerCard.module.scss';
 
@@ -8,9 +9,13 @@ interface BeerCardProps {
 }
 
 const BeerCard: React.FC<BeerCardProps> = ({ beer }) => {
+  const location = useLocation();
   return (
     <li className={styles['beer__card']}>
-      <Link to={'item/' + beer.id} className={styles['beer__link']}>
+      <Link
+        to={'item/' + beer.id + location.search}
+        className={styles['beer__link']}
+      >
         <div className={styles['beer__image-container']}>
           <img
             src={beer.image}

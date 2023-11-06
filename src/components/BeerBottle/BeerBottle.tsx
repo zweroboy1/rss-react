@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { PunkApi } from '../../services/PunkApi';
 import { Beer } from '../../types';
 import { Loader } from '../Loader';
@@ -7,6 +7,7 @@ import { Message } from '../Message';
 import styles from './BeerBottle.module.scss';
 
 const BeerBottle: React.FC = () => {
+  const location = useLocation();
   const { productId = '' } = useParams();
   const [beer, setBeer] = useState<Beer | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,7 +44,7 @@ const BeerBottle: React.FC = () => {
 
   return beer ? (
     <div className={styles['beer-bottle']}>
-      <Link to="..">close</Link>
+      <Link to={'/' + location.search}>close</Link>
       <div className={styles['beer-bottle__title']}>{beer.title}</div>
 
       <div className={styles['beer-bottle__image-container']}>

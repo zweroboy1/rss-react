@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Beers } from '../components/Beers';
 import styles from './Main.module.scss';
 import { LOCALSTORAGE_NAME } from '../constants';
 
 const Main: React.FC = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>(getQuery());
 
   function getQuery() {
@@ -18,6 +19,7 @@ const Main: React.FC = () => {
 
   const updateSearchQuery = (query: string) => {
     setSearchQuery(query);
+    navigate(`?query=${query}`);
   };
 
   useEffect(() => {
