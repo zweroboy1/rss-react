@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PunkApi } from '../../services/PunkApi';
 import { Beer } from '../../types';
 import { BeerCard } from '../BeerCard';
@@ -60,7 +60,12 @@ const Beers: React.FC<BeersProps> = ({ query }) => {
 
   return (
     <div className={styles['beers__container']}>
-      <Link to={'/' + location.search} className={styles['beers__link']}>
+      <div
+        className={styles['beers__link']}
+        onClick={() => {
+          navigate('/' + location.search);
+        }}
+      >
         <ul className={styles['beers__list']}>
           {beers.length > 0 ? (
             beers.map((beer) => <BeerCard key={beer.id} beer={beer} />)
@@ -68,7 +73,7 @@ const Beers: React.FC<BeersProps> = ({ query }) => {
             <Message message={`No beers found for "${query}"`} />
           )}
         </ul>
-      </Link>
+      </div>
     </div>
   );
 };
