@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
-import Pagination from '../components/Pagination/Pagination';
+import { Pagination } from '../components/Pagination';
 import { Beers } from '../components/Beers';
 import styles from './Main.module.scss';
 import { LOCALSTORAGE_NAME } from '../constants';

@@ -1,54 +1,64 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ITEMS_PER_PAGE_OPTIONS, PAGE_LIMIT } from '../../constants';
 
-const Pagination = () => {
+import styles from './Pagination.module.scss';
+
+const Pagination: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-
-  // Get the current page and limit from the URL query parameters
   const currentPage = Number(queryParams.get('page')) || 1;
-  const currentLimit = Number(queryParams.get('limit')) || 8;
+  const currentLimit =
+    Number(queryParams.get('limit')) || ITEMS_PER_PAGE_OPTIONS[0];
 
-  // Function to update the URL with new page and limit
   const updateURL = (page: number, limit: number) => {
     queryParams.set('page', String(page));
     queryParams.set('limit', String(limit));
     navigate(`/?${queryParams.toString()}`);
   };
 
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      updateURL(currentPage - 1, currentLimit);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < PAGE_LIMIT) {
+      updateURL(currentPage + 1, currentLimit);
+    }
+  };
+
+  const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLimit = parseInt(e.target.value, 10);
+    updateURL(1, newLimit);
+  };
+
   return (
-    <div>
-      <select
-        value={currentLimit}
-        onChange={(e) => {
-          const newLimit = parseInt(e.target.value, 10);
-          updateURL(1, newLimit); // Reset to page 1 when changing limit
-        }}
-      >
-        <option value="8">8 items per page</option>
-        <option value="12">12 items per page</option>
-        <option value="20">20 items per page</option>
-      </select>
+    <div className={styles['pagination']}>
       <button
-        onClick={() => {
-          if (currentPage > 1) {
-            updateURL(currentPage - 1, currentLimit);
-          }
-        }}
+        onClick={goToPreviousPage}
+        className={styles['pagination__button']}
       >
         &lt;
       </button>
-      <span>{currentPage}</span>
-      <button
-        onClick={() => {
-          if (currentPage < Math.ceil(100 / currentLimit)) {
-            updateURL(currentPage + 1, currentLimit);
-          }
-        }}
-      >
+      <span className={styles['pagination__current']}>{currentPage}</span>
+      <button onClick={goToNextPage} className={styles['pagination__button']}>
         &gt;
       </button>
+
+      <select
+        className={styles['pagination__select']}
+        value={currentLimit}
+        onChange={handleLimitChange}
+      >
+        {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+          <option key={option} value={option}>
+            {`${option} items per page`}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
