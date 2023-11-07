@@ -1,0 +1,22 @@
+.pagination {
+  display: flex;
+
+  &__current {
+    margin: 0 10px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #3a3a3a;
+  }
+
+  &__select {
+    margin-left: 10px;
+    padding: 5px;
+    font-family: inherit;
+  }
+
+  &__button {
+    padding: 5px;
+  }
+}
