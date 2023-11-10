@@ -42,7 +42,10 @@ const BeerBottle: React.FC = () => {
     return <Message message={`Error: ${error}`} />;
   }
 
-  return beer ? (
+  if (!beer) {
+    return null;
+  }
+  return (
     <div className={styles['beer-bottle']}>
       <Link to={'/' + location.search}>close</Link>
       <div className={styles['beer-bottle__title']}>{beer.title}</div>
@@ -56,8 +59,6 @@ const BeerBottle: React.FC = () => {
       </div>
       <div className={styles['beer-bottle__text']}>{beer.description}</div>
     </div>
-  ) : (
-    ''
   );
 };
 
