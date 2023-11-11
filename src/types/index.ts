@@ -16,3 +16,5 @@ export interface BeerApi {
 }
 
 export type ServerResponse = BeerApi[];
+
+export type LoadingStatus = 'idle' | 'loading' | 'error' | 'success';
