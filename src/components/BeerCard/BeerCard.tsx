@@ -14,6 +14,7 @@ const BeerCard: React.FC<BeerCardProps> = ({ beer }) => {
   return (
     <li className={styles['beer__card']}>
       <div
+        role="card"
         onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
           navigate('/item/' + beer.id + location.search);
           event.stopPropagation();
