@@ -30,11 +30,18 @@ const Pagination: React.FC = () => {
       <button
         onClick={goToPreviousPage}
         className={styles['pagination__button']}
+        data-testid="prev"
       >
         &lt;
       </button>
-      <span className={styles['pagination__current']}>{currentPage}</span>
-      <button onClick={goToNextPage} className={styles['pagination__button']}>
+      <span className={styles['pagination__current']} data-testid="current">
+        {currentPage}
+      </span>
+      <button
+        onClick={goToNextPage}
+        className={styles['pagination__button']}
+        data-testid="next"
+      >
         &gt;
       </button>
 
@@ -42,6 +49,7 @@ const Pagination: React.FC = () => {
         className={styles['pagination__select']}
         value={currentLimit}
         onChange={handleLimitChange}
+        data-testid="select"
       >
         {ITEMS_PER_PAGE_OPTIONS.map((option) => (
           <option key={option} value={option}>
