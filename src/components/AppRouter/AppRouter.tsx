@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import Main from '../pages/Main';
-import { BeerBottle } from '../components/BeerBottle';
-import { NotFound } from '../components/NotFound';
+import Main from '../../pages/Main';
+import { BeerBottle } from '../BeerBottle';
+import { NotFound } from '../NotFound';
 
 const AppRouter = () => {
   return (
@@ -14,4 +14,4 @@ const AppRouter = () => {
   );
 };
 
-export { AppRouter };
+export default AppRouter;
