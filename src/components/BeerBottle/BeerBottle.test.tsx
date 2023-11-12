@@ -92,7 +92,7 @@ describe('CardDetails component', () => {
       await userEvent.click(closeButton);
     });
 
-    expect(window.location.pathname).toEqual('/');
+    expect(window.location.pathname).toEqual('/aaa');
   });
 
   it('should display an error if no response is received from the server', async () => {
