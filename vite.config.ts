@@ -14,7 +14,8 @@ export default defineConfig({
       provider: 'v8',
       all: true,
       reporter: 'text',
-      exclude: [],
+      include: ['**/*.tsx', '**/*.ts'],
+      exclude: ['**/*.d.ts'],
     },
   },
 });

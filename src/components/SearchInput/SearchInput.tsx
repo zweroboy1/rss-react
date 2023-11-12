@@ -25,6 +25,7 @@ const SearchInput: React.FC<Props> = ({ placeholder }) => {
     <input
       className={styles.search}
       type="text"
+      role="searchbox"
       placeholder={placeholder}
       value={searchQuery}
       onChange={handleInputChange}
