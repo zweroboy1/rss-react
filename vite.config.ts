@@ -15,7 +15,7 @@ export default defineConfig({
       all: true,
       reporter: 'text',
       include: ['**/*.tsx', '**/*.ts'],
-      exclude: ['**/*.d.ts'],
+      exclude: ['**/*.d.ts', 'src/App.tsx', 'src/main.tsx'],
     },
   },
 });
