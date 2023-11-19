@@ -9,8 +9,6 @@ import React, {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuery } from '../store/slices/searchSlice';
-import { PunkApi } from '../services/PunkApi';
-import { LoadingStatus, Beer } from '../types';
 import {
   LOCALSTORAGE_NAME,
   ITEMS_PER_PAGE,
@@ -22,22 +20,16 @@ import { RootState } from '../store/store';
 interface AppContextProps {
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
-  loadingStatus: LoadingStatus;
-  setLoadingStatus: Dispatch<SetStateAction<LoadingStatus>>;
   currentPage: number;
   currentLimit: number;
-  beerList: Beer[];
   updateURL: (page?: number, limit?: number, query?: string) => void;
 }
 
 export const AppContext = createContext<AppContextProps>({
   searchQuery: '',
   setSearchQuery: () => {},
-  loadingStatus: 'idle',
-  setLoadingStatus: () => {},
   currentPage: 1,
   currentLimit: ITEMS_PER_PAGE,
-  beerList: [],
   updateURL: () => {},
 });
 
@@ -58,8 +50,6 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentLimit, setCurrentLimit] = useState<number>(ITEMS_PER_PAGE);
-  const [beerList, setBeerList] = useState<Beer[]>([]);
-  const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>('idle');
 
   const newQuery = queryParams.get('query') ?? getQuery();
   const currentQuery = useSelector((state: RootState) => state.search.query);
@@ -78,6 +68,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     navigate(`/?${queryParams.toString()}`);
   };
 
+  /*
   const punkApi = new PunkApi();
 
   const updateBeerList = async (
@@ -97,7 +88,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
       setLoadingStatus('error');
     }
   };
-
+*/
   useEffect(() => {
     const updateContextData = async () => {
       const queryParams = new URLSearchParams(location.search);
@@ -118,7 +109,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
       setCurrentPage(newPage);
       setCurrentLimit(newLimit);
 
-      await updateBeerList(newPage, newLimit, newQuery);
+      // await updateBeerList(newPage, newLimit, newQuery);
     };
     updateContextData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,11 +120,8 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         searchQuery,
         setSearchQuery,
-        loadingStatus,
-        setLoadingStatus,
         currentPage,
         currentLimit,
-        beerList,
         updateURL,
       }}
     >
