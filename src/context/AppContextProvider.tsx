@@ -68,27 +68,6 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     navigate(`/?${queryParams.toString()}`);
   };
 
-  /*
-  const punkApi = new PunkApi();
-
-  const updateBeerList = async (
-    page: number = currentPage,
-    limit: number = currentLimit,
-    query: string = searchQuery
-  ): Promise<void> => {
-    setLoadingStatus('loading');
-    try {
-      const beers = await punkApi.getSearchBeers(query, page, limit);
-      if (beers.length === 0 && page > 1) {
-        updateURL(1, limit, query);
-      }
-      setBeerList(beers);
-      setLoadingStatus('success');
-    } catch (error) {
-      setLoadingStatus('error');
-    }
-  };
-*/
   useEffect(() => {
     const updateContextData = async () => {
       const queryParams = new URLSearchParams(location.search);
@@ -108,8 +87,6 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
       setSearchQuery(newQuery);
       setCurrentPage(newPage);
       setCurrentLimit(newLimit);
-
-      // await updateBeerList(newPage, newLimit, newQuery);
     };
     updateContextData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

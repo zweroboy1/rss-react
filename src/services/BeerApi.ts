@@ -49,10 +49,13 @@ export const beerApi = createApi({
       },
     }),
 
-    getDetails: builder.query<{ data: Beer }, string>({
+    getDetails: builder.query<Beer, string>({
       query: (detailsId) => ({
         url: `/${detailsId}`,
       }),
+      transformResponse: (response: BeerApi[]) => {
+        return mapper(response[0]);
+      },
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         dispatch(setLoadingDetails(true));
         try {
