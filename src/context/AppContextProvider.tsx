@@ -7,6 +7,8 @@ import React, {
   ReactNode,
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateQuery } from '../store/slices/searchSlice';
 import { PunkApi } from '../services/PunkApi';
 import { LoadingStatus, Beer } from '../types';
 import {
@@ -15,6 +17,7 @@ import {
   ITEMS_PER_PAGE_OPTIONS,
   PAGE_LIMIT,
 } from '../constants';
+import { RootState } from '../store/store';
 
 interface AppContextProps {
   searchQuery: string;
@@ -48,6 +51,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem(LOCALSTORAGE_NAME, query);
   };
 
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -56,6 +60,12 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
   const [currentLimit, setCurrentLimit] = useState<number>(ITEMS_PER_PAGE);
   const [beerList, setBeerList] = useState<Beer[]>([]);
   const [loadingStatus, setLoadingStatus] = useState<LoadingStatus>('idle');
+
+  const newQuery = queryParams.get('query') ?? getQuery();
+  const currentQuery = useSelector((state: RootState) => state.search.query);
+  if (currentQuery !== newQuery) {
+    dispatch(updateQuery(newQuery));
+  }
 
   const updateURL = (
     page: number = 1,
@@ -92,6 +102,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({
     const updateContextData = async () => {
       const queryParams = new URLSearchParams(location.search);
       const newQuery = queryParams.get('query') ?? getQuery();
+
       let newPage = Number(queryParams.get('page')) || 1;
       let newLimit = Number(queryParams.get('limit')) || ITEMS_PER_PAGE;
 
