@@ -25,7 +25,7 @@ const BeerBottle: React.FC = () => {
   }
 
   if (isError) {
-    return <Message message={`Error: I can't fecth the data, sorry`} />;
+    return <Message message={`Error: An error occurred while fetching data`} />;
   }
 
   if (!data) {
