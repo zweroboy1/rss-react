@@ -6,4 +6,8 @@ export const handlers = [
   http.get(`${BEER_ENDPOINT}/`, () => {
     return HttpResponse.json(mockBeers);
   }),
+
+  http.get(`${BEER_ENDPOINT}`, () => {
+    return HttpResponse.json(mockBeers);
+  }),
 ];

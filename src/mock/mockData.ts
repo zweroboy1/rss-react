@@ -22,7 +22,7 @@ export const mockBeers = [
     tagline: 'Test Tag2',
     date: '2023-11-07',
     description: 'Test Description2',
-    iimage_url: 'https://randomsite.com/test-image2.jpg',
+    image_url: 'https://randomsite.com/test-image2.jpg',
   },
   {
     id: 3,

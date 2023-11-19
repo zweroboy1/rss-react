@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { AppContextProvider } from '../../context/AppContextProvider';
 import { MemoryRouter } from 'react-router-dom';
 import { LOCALSTORAGE_NAME } from '../../constants';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
 import { SearchInput } from './';
 
 describe('SearchInput component', () => {
@@ -23,9 +25,11 @@ describe('SearchInput component', () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <AppContextProvider>
-            <SearchInput placeholder="test" />
-          </AppContextProvider>
+          <Provider store={store}>
+            <AppContextProvider>
+              <SearchInput placeholder="test" />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -38,9 +42,11 @@ describe('SearchInput component', () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/?query=' + testRequest]}>
-          <AppContextProvider>
-            <SearchInput placeholder="test" />
-          </AppContextProvider>
+          <Provider store={store}>
+            <AppContextProvider>
+              <SearchInput placeholder="test" />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });
