@@ -12,7 +12,7 @@ const BeerCard: React.FC<BeerCardProps> = ({ beer }) => {
   const location = useLocation();
   const navigate = useNavigate();
   return (
-    <li className={styles['beer__card']} key={beer.id}>
+    <li className={styles['beer__card']} key={beer.id} role="listitem">
       <div
         role="card"
         onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

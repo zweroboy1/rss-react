@@ -5,6 +5,8 @@ import { AppContextProvider } from '../../context/AppContextProvider';
 import { MemoryRouter } from 'react-router-dom';
 import { LOCALSTORAGE_NAME } from '../../constants';
 import { Header } from './';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
 
 describe('Header component', () => {
   userEvent.setup();
@@ -27,9 +29,11 @@ describe('Header component', () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <AppContextProvider>
-            <Header />
-          </AppContextProvider>
+          <Provider store={store}>
+            <AppContextProvider>
+              <Header />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -45,9 +49,11 @@ describe('Header component', () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <AppContextProvider>
-            <Header />
-          </AppContextProvider>
+          <Provider store={store}>
+            <AppContextProvider>
+              <Header />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });

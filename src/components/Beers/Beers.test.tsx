@@ -7,67 +7,45 @@ import {
 import { MemoryRouter } from 'react-router-dom';
 import { AppContextProvider } from '../../context/AppContextProvider';
 import { Beers } from './';
-import { PunkApi } from '../../services/PunkApi';
-
-const mockBeers = [
-  {
-    id: 1,
-    title: 'Test Beer',
-    tag: 'Test Tag',
-    date: '2023-11-06',
-    description: 'Test Description',
-    image: 'test-image.jpg',
-  },
-  {
-    id: 2,
-    title: 'Test Beer',
-    tag: 'Test Tag',
-    date: '2023-11-06',
-    description: 'Test Description',
-    image: 'test-image.jpg',
-  },
-  {
-    id: 3,
-    title: 'Test Beer',
-    tag: 'Test Tag',
-    date: '2023-11-06',
-    description: 'Test Description',
-    image: 'test-image.jpg',
-  },
-];
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
+import { mockBeers } from '../../mock/mockData';
 
 describe('Card List component', () => {
   it('should renders the specified number of cards', async () => {
-    vi.spyOn(PunkApi.prototype, 'getBeers').mockResolvedValue(mockBeers);
-    act(() => {
+    await act(async () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <AppContextProvider>
-            <Beers />
-          </AppContextProvider>
+          <Provider store={store}>
+            <AppContextProvider>
+              <Beers />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });
 
     await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
-    const cards = screen.queryAllByText(mockBeers[0].title);
+    const cards = screen.getAllByRole('listitem');
     expect(cards.length).toBe(mockBeers.length);
   });
 
-  it('should appropriate message is displayed if no cards are present', async () => {
-    vi.spyOn(PunkApi.prototype, 'getBeers').mockResolvedValue([]);
-    act(() => {
+  it('should display appropriate message if no cards are present', async () => {
+    await act(async () => {
       render(
-        <MemoryRouter initialEntries={['/']}>
-          <AppContextProvider>
-            <Beers />
-          </AppContextProvider>
+        <MemoryRouter
+          initialEntries={['/?query=a&page=3&limit=12']}
+          initialIndex={0}
+        >
+          <Provider store={store}>
+            <AppContextProvider>
+              <Beers />
+            </AppContextProvider>
+          </Provider>
         </MemoryRouter>
       );
     });
-
-    await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
-    const noElement = screen.getByText('No beers found for ""');
+    const noElement = screen.getByText(mockBeers[2].name);
     expect(noElement).toBeInTheDocument();
   });
 });

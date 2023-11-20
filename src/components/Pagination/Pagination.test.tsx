@@ -4,6 +4,8 @@ import { AppContextProvider } from '../../context/AppContextProvider';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { Pagination } from './';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
 
 describe('Pagination component', () => {
   const testQuery = 'test';
@@ -14,9 +16,11 @@ describe('Pagination component', () => {
         {
           path: '/',
           element: (
-            <AppContextProvider>
-              <Pagination />
-            </AppContextProvider>
+            <Provider store={store}>
+              <AppContextProvider>
+                <Pagination />
+              </AppContextProvider>
+            </Provider>
           ),
         },
       ],

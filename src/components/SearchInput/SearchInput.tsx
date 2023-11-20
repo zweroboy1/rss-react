@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import { AppContext } from '../../context/AppContextProvider';
-
+import { updateQuery } from '../../store/slices/searchSlice';
 import styles from './SearchInput.module.scss';
 
 type Props = {
@@ -10,9 +11,11 @@ type Props = {
 const SearchInput: React.FC<Props> = ({ placeholder }) => {
   const { searchQuery, setSearchQuery, updateURL, currentLimit } =
     useContext(AppContext);
+  const dispatch = useDispatch();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      dispatch(updateQuery(searchQuery));
       updateURL(1, currentLimit, searchQuery);
     }
   };

@@ -8,6 +8,8 @@ import {
 import { describe, expect, it } from 'vitest';
 import { BeerCard } from './';
 import { BeerBottle } from '../BeerBottle';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
 
 const mockBeer = {
   id: 1,
@@ -23,11 +25,19 @@ const mockRouter = () => {
     [
       {
         path: '/',
-        element: <BeerCard beer={mockBeer} />,
+        element: (
+          <Provider store={store}>
+            <BeerCard beer={mockBeer} />
+          </Provider>
+        ),
       },
       {
         path: '/item/' + mockBeer.id,
-        element: <BeerBottle />,
+        element: (
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
+        ),
       },
     ],
     {
@@ -43,7 +53,9 @@ describe('BeerCard component', () => {
     act(() => {
       render(
         <MemoryRouter>
-          <BeerCard beer={mockBeer} />
+          <Provider store={store}>
+            <BeerCard beer={mockBeer} />
+          </Provider>
         </MemoryRouter>
       );
     });

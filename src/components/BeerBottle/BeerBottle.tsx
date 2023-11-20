@@ -1,36 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { PunkApi } from '../../services/PunkApi';
-import { Beer } from '../../types';
+import { useSelector } from 'react-redux';
 import { Loader } from '../Loader';
 import { Message } from '../Message';
+import { beerApi } from '../../services/BeerApi';
+import { RootState } from '../../store/store';
+
 import styles from './BeerBottle.module.scss';
 
 const BeerBottle: React.FC = () => {
   const location = useLocation();
   const { productId = '' } = useParams();
-  const [beer, setBeer] = useState<Beer | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    const fetchBeer = async () => {
-      setLoading(true);
-      try {
-        const punkApi = new PunkApi();
-        const beer = await punkApi.getBeer(productId);
-        setBeer(beer);
-        setLoading(false);
-        setError(null);
-      } catch (error) {
-        setError('An error occurred while fetching data');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBeer();
-  }, [productId]);
+  const { data, isError } = beerApi.useGetDetailsQuery(productId);
+  const loadingStatus = useSelector(
+    (state: RootState) => state.loading.loadingDetails
+  );
 
-  if (loading) {
+  if (loadingStatus) {
     return (
       <div className={styles['beer-bottle__loader']}>
         <Loader />
@@ -38,26 +24,26 @@ const BeerBottle: React.FC = () => {
     );
   }
 
-  if (error) {
-    return <Message message={`Error: ${error}`} />;
+  if (isError) {
+    return <Message message={`Error: An error occurred while fetching data`} />;
   }
 
-  if (!beer) {
+  if (!data) {
     return null;
   }
   return (
     <div className={styles['beer-bottle']}>
       <Link to={'/' + location.search}>close</Link>
-      <div className={styles['beer-bottle__title']}>{beer.title}</div>
+      <div className={styles['beer-bottle__title']}>{data.title}</div>
 
       <div className={styles['beer-bottle__image-container']}>
         <img
-          src={beer.image}
-          alt={beer.title}
+          src={data.image}
+          alt={data.title}
           className={styles['beer-bottle__image']}
         />
       </div>
-      <div className={styles['beer-bottle__text']}>{beer.description}</div>
+      <div className={styles['beer-bottle__text']}>{data.description}</div>
     </div>
   );
 };

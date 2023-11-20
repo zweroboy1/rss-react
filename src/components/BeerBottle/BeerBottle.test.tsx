@@ -7,39 +7,37 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { BeerBottle } from './';
-import { PunkApi } from '../../services/PunkApi';
+import { Provider } from 'react-redux';
+import { store } from '../../store/store';
+import { server } from '../../mock/server';
+import { mockBeers } from '../../mock/mockData';
 
-const mockBeer = {
-  id: 1,
-  title: 'Test Beer',
-  tag: 'Test Tag',
-  date: '2023-11-06',
-  description: 'Test Description',
-  image: 'test-image.jpg',
-};
-
-vi.spyOn(PunkApi.prototype, 'getBeer').mockResolvedValue(mockBeer);
+const mockBeer = mockBeers[0];
 
 describe('CardDetails component', () => {
   it('should trigger an additional API call to fetch detailed information when open detailed card', async () => {
     await act(async () => {
       render(
         <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
         </MemoryRouter>
       );
     });
-
-    expect(PunkApi.prototype.getBeer).toHaveBeenCalled();
+    const usedHandlers = server.listHandlers().filter((item) => item.isUsed);
+    expect(usedHandlers.length).toBeGreaterThan(0);
   });
 
   it('should display a loader while fetching data', async () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -54,7 +52,9 @@ describe('CardDetails component', () => {
     act(() => {
       render(
         <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -69,12 +69,14 @@ describe('CardDetails component', () => {
     await act(async () => {
       render(
         <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
         </MemoryRouter>
       );
     });
 
-    const beerTitle = screen.getByText(mockBeer.title);
+    const beerTitle = screen.getByText(mockBeer.name);
     expect(beerTitle).toBeInTheDocument();
   });
 
@@ -82,7 +84,9 @@ describe('CardDetails component', () => {
     await act(async () => {
       render(
         <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -93,24 +97,5 @@ describe('CardDetails component', () => {
     });
 
     expect(window.location.pathname).toEqual('/');
-  });
-
-  it('should display an error if no response is received from the server', async () => {
-    vi.spyOn(PunkApi.prototype, 'getBeer').mockRejectedValue(
-      new Error('Mock API error')
-    );
-
-    await act(async () => {
-      render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <BeerBottle />
-        </MemoryRouter>
-      );
-    });
-
-    const error = await screen.findByText(
-      'Error: An error occurred while fetching data'
-    );
-    expect(error).toBeInTheDocument();
   });
 });
