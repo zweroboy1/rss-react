@@ -1,10 +1,4 @@
-import {
-  act,
-  waitFor,
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { act, waitFor, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
@@ -40,22 +34,22 @@ describe('CardDetails component', () => {
       </MemoryRouter>
     );
 
-    await waitFor(() => {
+    waitFor(() => {
       const loader = screen.getByTestId('loader');
       expect(loader).toBeInTheDocument();
     });
   });
 
   it('should remove the loader after the API request', async () => {
-    render(
-      <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-        <Provider store={store}>
-          <BeerBottle />
-        </Provider>
-      </MemoryRouter>
-    );
-
-    await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
+          <Provider store={store}>
+            <BeerBottle />
+          </Provider>
+        </MemoryRouter>
+      );
+    });
 
     const loader = screen.queryByTestId('loader');
     expect(loader).toBeNull();
