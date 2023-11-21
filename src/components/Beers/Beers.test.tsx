@@ -13,17 +13,15 @@ import { mockBeers } from '../../mock/mockData';
 
 describe('Card List component', () => {
   it('should renders the specified number of cards', async () => {
-    await act(async () => {
-      render(
-        <MemoryRouter initialEntries={['/']}>
-          <Provider store={store}>
-            <AppContextProvider>
-              <Beers />
-            </AppContextProvider>
-          </Provider>
-        </MemoryRouter>
-      );
-    });
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Provider store={store}>
+          <AppContextProvider>
+            <Beers />
+          </AppContextProvider>
+        </Provider>
+      </MemoryRouter>
+    );
 
     await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
     const cards = screen.getAllByRole('listitem');

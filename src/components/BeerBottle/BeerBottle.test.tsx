@@ -32,15 +32,13 @@ describe('CardDetails component', () => {
   });
 
   it('should display a loader while fetching data', async () => {
-    act(() => {
-      render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
-      );
-    });
+    render(
+      <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
+        <Provider store={store}>
+          <BeerBottle />
+        </Provider>
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
       const loader = screen.getByTestId('loader');
@@ -49,15 +47,13 @@ describe('CardDetails component', () => {
   });
 
   it('should remove the loader after the API request', async () => {
-    act(() => {
-      render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
-      );
-    });
+    render(
+      <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
+        <Provider store={store}>
+          <BeerBottle />
+        </Provider>
+      </MemoryRouter>
+    );
 
     await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
 
