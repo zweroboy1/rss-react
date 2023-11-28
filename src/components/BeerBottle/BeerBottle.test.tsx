@@ -1,91 +1,45 @@
-import { act, waitFor, render, screen } from '@testing-library/react';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { BeerBottle } from './';
-import { Provider } from 'react-redux';
-import { store } from '../../store/store';
-import { server } from '../../mock/server';
-import { mockBeers } from '../../mock/mockData';
+import createMockRouter from '../../mock/createMockRouter';
+import { mockBeer1 } from '../../mock/mockData';
 
-const mockBeer = mockBeers[0];
+const mockRouter = createMockRouter({
+  query: { details: '1' },
+});
 
 describe('CardDetails component', () => {
-  it('should trigger an additional API call to fetch detailed information when open detailed card', async () => {
-    await act(async () => {
-      render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
-      );
-    });
-    const usedHandlers = server.listHandlers().filter((item) => item.isUsed);
-    expect(usedHandlers.length).toBeGreaterThan(0);
-  });
-
-  it('should display a loader while fetching data', async () => {
-    render(
-      <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-        <Provider store={store}>
-          <BeerBottle />
-        </Provider>
-      </MemoryRouter>
-    );
-
-    waitFor(() => {
-      const loader = screen.getByTestId('loader');
-      expect(loader).toBeInTheDocument();
-    });
-  });
-
-  it('should remove the loader after the API request', async () => {
-    await act(async () => {
-      render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
-      );
-    });
-
-    const loader = screen.queryByTestId('loader');
-    expect(loader).toBeNull();
-  });
+  userEvent.setup();
 
   it('should correctly display the detailed card data', async () => {
     await act(async () => {
       render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
+        <RouterContext.Provider value={mockRouter}>
+          <BeerBottle beer={mockBeer1} />
+        </RouterContext.Provider>
       );
     });
-
-    const beerTitle = screen.getByText(mockBeer.name);
+    const beerTitle = screen.getByText(mockBeer1.title);
     expect(beerTitle).toBeInTheDocument();
+    const beerDescription = screen.getByText(mockBeer1.description);
+    expect(beerDescription).toBeInTheDocument();
   });
 
   it('should hide the component after clicking the close button', async () => {
     await act(async () => {
       render(
-        <MemoryRouter initialEntries={['/item/' + mockBeer.id]}>
-          <Provider store={store}>
-            <BeerBottle />
-          </Provider>
-        </MemoryRouter>
+        <RouterContext.Provider value={mockRouter}>
+          <BeerBottle beer={mockBeer1} />
+        </RouterContext.Provider>
       );
     });
-
     const closeButton = screen.getByText('close');
-    await act(async () => {
-      await userEvent.click(closeButton);
+    await userEvent.click(closeButton);
+    expect(mockRouter.push).toBeCalledWith({
+      pathname: '/',
+      query: {},
     });
-
-    expect(window.location.pathname).toEqual('/');
   });
 });

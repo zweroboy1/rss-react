@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Beer } from '../../types';
-import { BLUR_IMAGE } from '@/constants/blur';
+import { BLUR_IMAGE } from '../../constants/blur';
 
 import styles from './BeerBottle.module.scss';
 
