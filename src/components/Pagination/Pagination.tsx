@@ -17,7 +17,11 @@ const Pagination: React.FC = () => {
 
   const updateURL = (newPage: number, newLimit: number) => {
     router.push({
-      query: { query: searchQuery, page: newPage, limit: newLimit },
+      query: {
+        query: searchQuery,
+        page: String(newPage),
+        limit: String(newLimit),
+      },
     });
   };
 

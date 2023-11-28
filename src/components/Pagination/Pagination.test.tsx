@@ -1,53 +1,62 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AppContextProvider } from '../../context/AppContextProvider';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { describe, expect, it } from 'vitest';
 import { Pagination } from './';
-import { Provider } from 'react-redux';
-import { store } from '../../store/store';
+
+import createMockRouter from '../../mock/createMockRouter';
 
 describe('Pagination component', () => {
   const testQuery = 'test';
-
-  const mockRouter = () => {
-    const router = createMemoryRouter(
-      [
-        {
-          path: '/',
-          element: (
-            <Provider store={store}>
-              <AppContextProvider>
-                <Pagination />
-              </AppContextProvider>
-            </Provider>
-          ),
-        },
-      ],
-      {
-        initialEntries: [`/?query=${testQuery}&page=2`],
-      }
-    );
-    render(<RouterProvider router={router} />);
-    return { router };
-  };
+  const startPage = 2;
+  const startLimit = 8;
+  const newLimit = 20;
+  userEvent.setup();
 
   it('should updates URL query parameters when click button or change limit', async () => {
-    const { router } = mockRouter();
+    const mockRouter = createMockRouter({
+      query: {
+        query: testQuery,
+        page: String(startPage),
+        limit: String(startLimit),
+      },
+    });
+    act(() => {
+      render(
+        <RouterContext.Provider value={mockRouter}>
+          <Pagination />
+        </RouterContext.Provider>
+      );
+    });
 
     const prevButton = screen.getByTestId('prev');
     await userEvent.click(prevButton);
-    expect(router.state.location.search).toContain('page=1');
-
-    const currentPage = screen.getByTestId('current');
-    expect(currentPage.textContent).toBe('1');
+    expect(mockRouter.push).toBeCalledWith({
+      query: {
+        query: testQuery,
+        page: String(startPage - 1),
+        limit: String(startLimit),
+      },
+    });
 
     const nextButton = screen.getByTestId('next');
     await userEvent.click(nextButton);
+    expect(mockRouter.push).toBeCalledWith({
+      query: {
+        query: testQuery,
+        page: String(startPage + 1),
+        limit: String(startLimit),
+      },
+    });
+
     const selectElement = screen.getByTestId('select');
-    fireEvent.change(selectElement, { target: { value: '20' } });
-    expect(router.state.location.search).toBe(
-      `?query=${testQuery}&page=1&limit=20`
-    );
+    fireEvent.change(selectElement, { target: { value: String(newLimit) } });
+    expect(mockRouter.push).toBeCalledWith({
+      query: {
+        query: testQuery,
+        page: String(1),
+        limit: String(newLimit),
+      },
+    });
   });
 });
