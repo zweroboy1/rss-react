@@ -13,6 +13,11 @@
   }
 
   &__link {
-    text-decoration: none;
+    padding: 4px;
+
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(72, 226, 175);
+    }
   }
 }

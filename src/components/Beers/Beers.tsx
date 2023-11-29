@@ -2,9 +2,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { BeerCard } from '../BeerCard';
 import { Message } from '../Message';
+import { Beer } from '@/types';
 
 import styles from './Beers.module.scss';
-import { Beer } from '@/types';
 
 const Beers = ({ data }: { data: Beer[] }) => {
   const router = useRouter();
