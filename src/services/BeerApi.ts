@@ -1,13 +1,13 @@
+import { HYDRATE } from 'next-redux-wrapper';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Beer, BeerApi } from '../types';
-import { BEER_ENDPOINT } from '../constants/';
+import { Beer, BeerApi } from '@/types';
+import { BEER_ENDPOINT } from '@/constants';
 import {
   setLoadingList,
   setLoadingDetails,
 } from '../store/slices/loadingSlice';
-import { updateItemList } from '../store/slices/itemListSlice';
-
-import { mapper } from '../utils/mapper';
+import { mapper } from '@/utils/mapper';
+import { itemListSlice } from '@/store/slices/itemListSlice';
 
 interface QueryParams {
   page: number;
@@ -15,8 +15,14 @@ interface QueryParams {
   searchValue?: string;
 }
 export const beerApi = createApi({
-  reducerPath: 'beerApi',
   baseQuery: fetchBaseQuery({ baseUrl: BEER_ENDPOINT }),
+
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
+
   endpoints: (builder) => ({
     getItemList: builder.query<Beer[], QueryParams>({
       query: ({ limit, page, searchValue }) => {
@@ -28,13 +34,14 @@ export const beerApi = createApi({
         if (searchValue) {
           params.beer_name = searchValue;
         }
-
         return { url: '', params };
       },
+
       transformResponse: (response: BeerApi[]) => {
         return response.map((item) => mapper(item));
       },
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        const { updateItemList } = itemListSlice.actions;
         dispatch(setLoadingList(true));
         try {
           const { data } = await queryFulfilled;
@@ -57,9 +64,11 @@ export const beerApi = createApi({
         return mapper(response[0]);
       },
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        const { updateCurrentItem } = itemListSlice.actions;
         dispatch(setLoadingDetails(true));
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          dispatch(updateCurrentItem(data));
         } finally {
           dispatch(setLoadingDetails(false));
         }
@@ -68,4 +77,9 @@ export const beerApi = createApi({
   }),
 });
 
-export const { useGetItemListQuery } = beerApi;
+export const {
+  useGetItemListQuery,
+  useGetDetailsQuery,
+  util: { getRunningQueriesThunk },
+} = beerApi;
+export const { getItemList, getDetails } = beerApi.endpoints;

@@ -1,39 +1,53 @@
-import React, { useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppContext } from '../../context/AppContextProvider';
-import { updateQuery } from '../../store/slices/searchSlice';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { ITEMS_PER_PAGE } from '@/constants';
+import { Button } from '../Button';
+
 import styles from './SearchInput.module.scss';
 
-type Props = {
-  placeholder: string;
-};
+const SearchInput: React.FC = () => {
+  const router = useRouter();
+  const { query } = router;
+  const { limit } = query;
+  const [searchInput, setSearchInput] = useState<string>('');
 
-const SearchInput: React.FC<Props> = ({ placeholder }) => {
-  const { searchQuery, setSearchQuery, updateURL, currentLimit } =
-    useContext(AppContext);
-  const dispatch = useDispatch();
+  const searchItems = () => {
+    router.push({
+      query: {
+        query: searchInput,
+        page: String(1),
+        limit: String(limit || ITEMS_PER_PAGE),
+      },
+    });
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      dispatch(updateQuery(searchQuery));
-      updateURL(1, currentLimit, searchQuery);
+      searchItems();
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+    setSearchInput(event.target.value);
   };
 
+  useEffect(() => {
+    setSearchInput(query.query?.toString() || '');
+  }, [query]);
+
   return (
-    <input
-      className={styles.search}
-      type="text"
-      role="searchbox"
-      placeholder={placeholder}
-      value={searchQuery}
-      onChange={handleInputChange}
-      onKeyDown={handleKeyDown}
-    />
+    <>
+      <input
+        className={styles.search}
+        type="text"
+        role="searchbox"
+        placeholder="input beer name"
+        value={searchInput}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+      <Button onClick={searchItems}>Search</Button>
+    </>
   );
 };
 

@@ -1,10 +1,9 @@
-import { Component, ReactNode, ReactElement, ErrorInfo } from 'react';
+import { Component, ReactNode } from 'react';
 import styles from './ErrorBoundary.module.scss';
 import { Button } from '../Button';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback: ReactElement;
 }
 
 interface ErrorBoundaryState {
@@ -23,24 +22,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  static handleButtonClick = (): void => {
-    window.location.reload();
-  };
-
-  componentDidCatch(error: Error, info: ErrorInfo): void {
+  componentDidCatch(): void {
     this.setState({ hasError: true });
-    console.log('Handled error:', error, 'Info:', info);
   }
 
   render() {
     const { hasError } = this.state;
-    const { children, fallback } = this.props;
+    const { children } = this.props;
 
     if (hasError) {
       return (
         <div className={styles.error}>
-          <h1>{fallback}</h1>
-          <Button onClick={ErrorBoundary.handleButtonClick}>Reload page</Button>
+          <h1>Something went wrong...</h1>
+          <Button onClick={() => location.reload()}>Reload page</Button>
         </div>
       );
     }

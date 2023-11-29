@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppContext } from '../../context/AppContextProvider';
-import { updateQuery } from '../../store/slices/searchSlice';
+import React, { useState, useEffect } from 'react';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
 
@@ -9,13 +6,6 @@ import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const [isError, setIsError] = useState(false);
-  const { searchQuery, currentLimit, updateURL } = useContext(AppContext);
-  const dispatch = useDispatch();
-
-  const handleSearch = () => {
-    dispatch(updateQuery(searchQuery));
-    updateURL(1, currentLimit, searchQuery);
-  };
 
   const emitError = () => {
     setIsError(true);
@@ -31,8 +21,7 @@ const Header: React.FC = () => {
     <>
       <h1 className={styles.h1}>Choose your beer</h1>
       <div className={styles.container}>
-        <SearchInput placeholder="input beer name" />
-        <Button onClick={handleSearch}>Search</Button>
+        <SearchInput />
         <Button onClick={emitError}>Simulate Error</Button>
       </div>
     </>

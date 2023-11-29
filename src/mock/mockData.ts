@@ -1,3 +1,4 @@
+import { Beer } from '@/types';
 export const mockBeer = {
   id: 1,
   name: 'Test Beer',
@@ -5,6 +6,15 @@ export const mockBeer = {
   first_brewed: '2023-11-06',
   description: 'Test Description Beer',
   image_url: 'https://randomsite.com/test-image.jpg',
+};
+
+export const mockBeer1: Beer = {
+  id: 1,
+  title: 'Test Beer',
+  tag: 'Test Tag',
+  date: '2023-11-06',
+  description: 'Test Description Beer',
+  image: 'https://randomsite.com/test-image.jpg',
 };
 
 export const mockBeers = [

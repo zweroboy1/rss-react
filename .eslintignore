@@ -6,6 +6,7 @@ babel.config.js
 commitlint.config.js
 node_modules/
 dist/
+prev/
 package.json
 package-lock.json
 tsconfig.json

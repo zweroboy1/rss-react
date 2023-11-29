@@ -1,8 +1,6 @@
-import '@testing-library/jest-dom/vitest';
+import '@testing-library/jest-dom';
 import { beforeAll, afterEach, afterAll, vi } from 'vitest';
-globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-import { server } from './src/mock/server';
-
+import { server } from '@/mock/server';
 
 beforeAll(() => server.listen());
 

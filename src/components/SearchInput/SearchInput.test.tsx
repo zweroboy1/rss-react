@@ -1,56 +1,48 @@
-import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { AppContextProvider } from '../../context/AppContextProvider';
-import { MemoryRouter } from 'react-router-dom';
-import { LOCALSTORAGE_NAME } from '../../constants';
-import { Provider } from 'react-redux';
-import { store } from '../../store/store';
+import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { SearchInput } from './';
+import createMockRouter from '../../mock/createMockRouter';
+import { userEvent } from '@testing-library/user-event';
+
+const searchQuery = 'ale';
+const mockRouter = createMockRouter({
+  query: { query: searchQuery, page: '1', limit: '8', details: '1' },
+});
 
 describe('SearchInput component', () => {
   userEvent.setup();
-  const storage: Record<string, string> = {};
-
-  Object.defineProperty(window, 'localStorage', {
-    value: {
-      setItem: vi.fn((key: string, value: string) => {
-        storage[key] = value;
-      }),
-      getItem: vi.fn((key: string) => storage[key]),
-    },
-  });
-  storage[LOCALSTORAGE_NAME] = 'beerName';
-
-  it('should retrieve the value from the local storage upon mounting', () => {
-    act(() => {
-      render(
-        <MemoryRouter initialEntries={['/']}>
-          <Provider store={store}>
-            <AppContextProvider>
-              <SearchInput placeholder="test" />
-            </AppContextProvider>
-          </Provider>
-        </MemoryRouter>
-      );
-    });
-    const searchInput = screen.getByRole<HTMLInputElement>('searchbox');
-    expect(searchInput.value).toBe(storage[LOCALSTORAGE_NAME]);
-  });
-
   it('should show the value from the query string upon mounting', () => {
-    const testRequest = 'ale';
     act(() => {
       render(
-        <MemoryRouter initialEntries={['/?query=' + testRequest]}>
-          <Provider store={store}>
-            <AppContextProvider>
-              <SearchInput placeholder="test" />
-            </AppContextProvider>
-          </Provider>
-        </MemoryRouter>
+        <RouterContext.Provider value={mockRouter}>
+          <SearchInput />
+        </RouterContext.Provider>
       );
     });
     const searchInput = screen.getByRole<HTMLInputElement>('searchbox');
-    expect(searchInput.value).toBe(testRequest);
+    expect(searchInput.value).toBe(searchQuery);
+  });
+
+  it('should change route when user inputs new search query and clicks Enter', () => {
+    act(() => {
+      render(
+        <RouterContext.Provider value={mockRouter}>
+          <SearchInput />
+        </RouterContext.Provider>
+      );
+    });
+
+    const searchInput = screen.getByPlaceholderText('input beer name');
+    const searchButton = screen.getByText('Search');
+
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+
+    fireEvent.change(searchInput, { target: { value: 'New beer' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      query: { query: 'New beer', page: '1', limit: '8' },
+    });
   });
 });

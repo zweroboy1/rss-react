@@ -1,28 +1,45 @@
-import React, { useContext } from 'react';
-import { AppContext } from '../../context/AppContextProvider';
-import { ITEMS_PER_PAGE_OPTIONS, PAGE_LIMIT } from '../../constants';
+import React from 'react';
+import { useRouter } from 'next/router';
+import {
+  ITEMS_PER_PAGE_OPTIONS,
+  ITEMS_PER_PAGE,
+  PAGE_LIMIT,
+} from '@/constants';
 
 import styles from './Pagination.module.scss';
 
 const Pagination: React.FC = () => {
-  const { searchQuery, currentPage, currentLimit, updateURL } =
-    useContext(AppContext);
+  const router = useRouter();
+  const { query } = router;
+  const searchQuery = query?.query || '';
+  const currentPage = +(query?.page || 1);
+  const currentLimit = +(query?.limit || ITEMS_PER_PAGE);
+
+  const updateURL = (newPage: number, newLimit: number) => {
+    router.push({
+      query: {
+        query: searchQuery,
+        page: String(newPage),
+        limit: String(newLimit),
+      },
+    });
+  };
 
   const goToPreviousPage = () => {
     if (currentPage > 1) {
-      updateURL(currentPage - 1, currentLimit, searchQuery);
+      updateURL(currentPage - 1, currentLimit);
     }
   };
 
   const goToNextPage = () => {
     if (currentPage < PAGE_LIMIT) {
-      updateURL(currentPage + 1, currentLimit, searchQuery);
+      updateURL(currentPage + 1, currentLimit);
     }
   };
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLimit = Number(e.target.value);
-    updateURL(1, newLimit, searchQuery);
+    updateURL(1, newLimit);
   };
 
   return (

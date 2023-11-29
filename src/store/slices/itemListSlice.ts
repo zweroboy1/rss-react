@@ -3,21 +3,25 @@ import { Beer } from '../../types';
 
 interface ItemListState {
   items: Beer[];
+  currentItem?: Beer | null;
 }
 
 const initialState: ItemListState = {
   items: [],
+  currentItem: null,
 };
 
-const itemListSlice = createSlice({
+export const itemListSlice = createSlice({
   name: 'item list',
   initialState,
   reducers: {
     updateItemList(state, action: PayloadAction<Beer[]>) {
       state.items = action.payload;
     },
+    updateCurrentItem(state, action: PayloadAction<Beer>) {
+      state.currentItem = action.payload;
+    },
   },
 });
 
-export const { updateItemList } = itemListSlice.actions;
-export const itemListReducer = itemListSlice.reducer;
+export default itemListSlice.reducer;
