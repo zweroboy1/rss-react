@@ -1,32 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../../context/AppContextProvider';
+
 import styles from './SearchInput.module.scss';
 
 type Props = {
   placeholder: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  getInputValue: () => void;
 };
 
-const SearchInput: React.FC<Props> = ({
-  placeholder,
-  value,
-  onChange,
-  getInputValue,
-}) => {
+const SearchInput: React.FC<Props> = ({ placeholder }) => {
+  const { searchQuery, setSearchQuery, updateURL, currentLimit } =
+    useContext(AppContext);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      getInputValue();
+      updateURL(1, currentLimit, searchQuery);
     }
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
     <input
       className={styles.search}
       type="text"
+      role="searchbox"
       placeholder={placeholder}
-      value={value}
-      onChange={onChange}
+      value={searchQuery}
+      onChange={handleInputChange}
       onKeyDown={handleKeyDown}
     />
   );

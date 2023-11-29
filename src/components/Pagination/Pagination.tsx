@@ -1,38 +1,28 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { AppContext } from '../../context/AppContextProvider';
 import { ITEMS_PER_PAGE_OPTIONS, PAGE_LIMIT } from '../../constants';
 
 import styles from './Pagination.module.scss';
 
 const Pagination: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const queryParams = new URLSearchParams(location.search);
-  const currentPage = Number(queryParams.get('page')) || 1;
-  const currentLimit =
-    Number(queryParams.get('limit')) || ITEMS_PER_PAGE_OPTIONS[0];
-
-  const updateURL = (page: number, limit: number) => {
-    queryParams.set('page', String(page));
-    queryParams.set('limit', String(limit));
-    navigate(`/?${queryParams.toString()}`);
-  };
+  const { searchQuery, currentPage, currentLimit, updateURL } =
+    useContext(AppContext);
 
   const goToPreviousPage = () => {
     if (currentPage > 1) {
-      updateURL(currentPage - 1, currentLimit);
+      updateURL(currentPage - 1, currentLimit, searchQuery);
     }
   };
 
   const goToNextPage = () => {
     if (currentPage < PAGE_LIMIT) {
-      updateURL(currentPage + 1, currentLimit);
+      updateURL(currentPage + 1, currentLimit, searchQuery);
     }
   };
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLimit = parseInt(e.target.value, 10);
-    updateURL(1, newLimit);
+    const newLimit = Number(e.target.value);
+    updateURL(1, newLimit, searchQuery);
   };
 
   return (
@@ -40,11 +30,18 @@ const Pagination: React.FC = () => {
       <button
         onClick={goToPreviousPage}
         className={styles['pagination__button']}
+        data-testid="prev"
       >
         &lt;
       </button>
-      <span className={styles['pagination__current']}>{currentPage}</span>
-      <button onClick={goToNextPage} className={styles['pagination__button']}>
+      <span className={styles['pagination__current']} data-testid="current">
+        {currentPage}
+      </span>
+      <button
+        onClick={goToNextPage}
+        className={styles['pagination__button']}
+        data-testid="next"
+      >
         &gt;
       </button>
 
@@ -52,6 +49,7 @@ const Pagination: React.FC = () => {
         className={styles['pagination__select']}
         value={currentLimit}
         onChange={handleLimitChange}
+        data-testid="select"
       >
         {ITEMS_PER_PAGE_OPTIONS.map((option) => (
           <option key={option} value={option}>

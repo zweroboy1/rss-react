@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AppContext } from '../../context/AppContextProvider';
 import { SearchInput } from '../SearchInput';
 import { Button } from '../Button';
 
 import styles from './Header.module.scss';
 
-interface HeaderProps {
-  query: string;
-  onSearch: (query: string) => void;
-  onUpdateQuery: (query: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = (props) => {
-  const [searchQuery, setSearchQuery] = useState<string>(props.query);
+const Header: React.FC = () => {
   const [isError, setIsError] = useState(false);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-    props.onUpdateQuery(event.target.value);
-  };
+  const { searchQuery, currentLimit, updateURL } = useContext(AppContext);
 
   const handleSearch = () => {
-    props.onSearch(searchQuery);
+    updateURL(1, currentLimit, searchQuery);
   };
 
   const emitError = () => {
@@ -37,12 +27,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     <>
       <h1 className={styles.h1}>Choose your beer</h1>
       <div className={styles.container}>
-        <SearchInput
-          placeholder="input beer name"
-          value={searchQuery}
-          onChange={handleInputChange}
-          getInputValue={handleSearch}
-        />
+        <SearchInput placeholder="input beer name" />
         <Button onClick={handleSearch}>Search</Button>
         <Button onClick={emitError}>Simulate Error</Button>
       </div>
