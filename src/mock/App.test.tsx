@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { Router } from 'next/router';
-import createMockRouter from '../mock/createMockRouter';
+import createMockRouter from './createMockRouter';
 import App from '@/pages/_app';
 
 const mockRouter = createMockRouter({

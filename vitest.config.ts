@@ -17,7 +17,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html'],
       include: ['**/*.tsx'],
-      exclude: []
+      exclude: ['.next', 'node_modules']
     },
   },
   resolve: {
