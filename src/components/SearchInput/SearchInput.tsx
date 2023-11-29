@@ -13,7 +13,11 @@ const SearchInput: React.FC = () => {
 
   const searchItems = () => {
     router.push({
-      query: { query: searchInput, page: 1, limit: limit || ITEMS_PER_PAGE },
+      query: {
+        query: searchInput,
+        page: String(1),
+        limit: String(limit || ITEMS_PER_PAGE),
+      },
     });
   };
 
