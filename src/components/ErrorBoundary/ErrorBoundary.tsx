@@ -1,4 +1,4 @@
-import { Component, ReactNode, ErrorInfo } from 'react';
+import { Component, ReactNode } from 'react';
 import styles from './ErrorBoundary.module.scss';
 import { Button } from '../Button';
 
@@ -22,9 +22,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo): void {
+  componentDidCatch(): void {
     this.setState({ hasError: true });
-    console.log('Handled error:', error, 'Info:', info);
   }
 
   render() {

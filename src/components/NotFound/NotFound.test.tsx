@@ -20,7 +20,7 @@ describe('Not Found component', () => {
     expect(screen.getByText('404 Not Found')).toBeInTheDocument();
   });
 
-  it('should redirect to the Main page on click by link', async () => {
+  it('should redirect to the Main page after click on the link', async () => {
     render(
       <RouterContext.Provider value={mockRouter}>
         <Custom404 />
